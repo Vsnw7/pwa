@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Umbra Nexus - Descubre nuestros proyectos, noticias y descargas.">
+  <meta name="keywords" content="videojuegos, desarrollo, aplicaciones, Umbra Nexus, gaming, tecnología">
+  <meta name="author" content="Umbra Nexus">
+  <meta name="theme-color" content="#19183b">
+  <title>{% block title %}Umbra Nexus{% endblock %}</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+
+  <!-- iOS Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Umbra Nexus">
+  <link rel="apple-touch-icon" href="{% static 'img/umbra nexus-192.png' %}">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  
+  <link rel="preload" as="image" href="{% static 'img/umbra nexus.webp' %}">
+  <link rel="preload" as="image" href="{% static 'img/fondo4.webp' %}" fetchpriority="high">
+
+
+</head>
+
+<body class="text-sm md:text-xl bg-[#f9f5f0] text-gray-900 font-sans tracking-wide flex flex-col min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="bg-[#f5efe6]/90 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <!-- LOGO -->
+      <a href="{% url 'inicio' %}" class="flex items-center text-2xl md:text-2xl font-bold text-[#19183b] hover:text-[#a1c2bd] transition">
+        <img src="{% static 'img/umbra nexus.webp' %}" class="w-12 h-12 md:w-12 md:h-12 mr-2" alt="Umbra Nexus Logo" decoding="async" fetchpriority="low">  
+        Umbra Nexus
+      </a>
+
+      <!-- BOTÓN HAMBURGUESA -->
+      <button aria-label="Menú de hamburguesa" aria-expanded="false" id="menu-btn" class="md:hidden flex flex-col space-y-1.5 focus:outline-none">
+        <span class="block w-6 h-0.5 bg-[#19183b] transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-[#19183b] transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-[#19183b] transition-all duration-300"></span>
+      </button>
+
+
+      <!-- MENÚ NORMAL (desktop) -->
+      <div id="menu" class="hidden md:flex space-x-6 text-lg md:text-sm font-semibold text-[#19183b]">
+        <a href="{% url 'inicio' %}" class="relative px-3 py-2 hover:text-[#a1c2bd] transition
+        {% if request.path == '/' %}after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-[#a1c2bd]{% endif %}">
+          Inicio
+        </a>
+
+        <a href="{% url 'noticias' %}" class="relative px-3 py-2 hover:text-[#a1c2bd] transition
+        {% if request.path == '/noticias/' %}after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-[#a1c2bd]{% endif %}">
+          Noticias
+        </a>
+
+        <a href="{% url 'galeria' %}" class="relative px-3 py-2 hover:text-[#a1c2bd] transition
+        {% if request.path == '/galeria/' %}after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-[#a1c2bd]{% endif %}">
+          Galería
+        </a>
+
+        <a href="{% url 'descargas' %}" class="relative px-3 py-2 hover:text-[#a1c2bd] transition
+        {% if request.path == '/descargas/' %}after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-[#a1c2bd]{% endif %}">
+          Descargas
+        </a>
+      </div>
+    </div>
+
+    <!-- MENÚ DESPLEGABLE MÓVIL -->
+    <div id="mobile-menu" class="hidden flex-col items-center space-y-2 text-[#19183b] font-semibold bg-[#f5efe6]/95 border-t border-gray-300 md:hidden">
+      <a href="{% url 'inicio' %}" class="block w-full py-3 text-lg text-center hover:bg-[#e9e5de] {% if request.path == '/' %}bg-[#e9e5de]{% endif %}">Inicio</a>
+      <a href="{% url 'noticias' %}" class="block w-full py-3 text-lg text-center hover:bg-[#e9e5de] {% if request.path == '/noticias/' %}bg-[#e9e5de]{% endif %}">Noticias</a>
+      <a href="{% url 'galeria' %}" class="block w-full py-3 text-lg text-center hover:bg-[#e9e5de] {% if request.path == '/galeria/' %}bg-[#e9e5de]{% endif %}">Galería</a>
+      <a href="{% url 'descargas' %}" class="block w-full py-3 text-lg text-center hover:bg-[#e9e5de] {% if request.path == '/descargas/' %}bg-[#e9e5de]{% endif %}">Descargas</a>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="bg-[#f9f5f0] flex-grow">
+    
+    <!-- BOTÓN VOLVER -->
+    {% if request.path != '/' %}
+    <div class="container mx-auto px-4 pt-6 md:hidden">
+      <a href="{% url 'inicio' %}" 
+         class="flex items-center gap-2 text-[#19183b] hover:text-[#a1c2bd] font-semibold transition-colors duration-200 group">
+         <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span class="text-lg md:text-base">Volver</span>
+      </a>
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#19183b] text-center text-sm md:text-l text-[#f5efe6] py-12 border-t border-gray-300">
+    © 2025 <span class="text-[#a1c2bd] font-semibold">Umbra Nexus</span>. Todos los derechos reservados.
+  </footer>
+
+
+  <!-- SCRIPT PEQUEÑO -->
+  <script defer>
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+
+  function cerrarMenu() {
+    menuOpen = false;
+    mobileMenu.classList.add('hidden');
+    const spans = menuBtn.querySelectorAll('span');
+    spans[0].classList.remove('rotate-45', 'translate-y-2');
+    spans[1].classList.remove('opacity-0');
+    spans[2].classList.remove('-rotate-45', '-translate-y-2');
+  }
+
+  menuBtn.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu.classList.toggle('hidden');
+    menuBtn.setAttribute('aria-expanded', menuOpen);
+    const spans = menuBtn.querySelectorAll('span');
+
+    if (menuOpen) {
+      spans[0].classList.add('rotate-45', 'translate-y-2');
+      spans[1].classList.add('opacity-0');
+      spans[2].classList.add('-rotate-45', '-translate-y-2');
+    } else {
+      spans[0].classList.remove('rotate-45', 'translate-y-2');
+      spans[1].classList.remove('opacity-0');
+      spans[2].classList.remove('-rotate-45', '-translate-y-2');
+    }
+  });
+
+
+
+  // Cerrar menú al hacer clic en cualquier enlace del menú móvil
+  const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      cerrarMenu();
+    });
+  });
+
+
+  if ("serviceWorker" in navigator) {
+      window.addEventListener('load', function() {
+          // Nota: Ya no usamos /static/, apuntamos a la raíz
+          navigator.serviceWorker.register('/sw.js')
+           .then(reg => console.log("SW registrado con éxito en el scope:", reg.scope))
+           .catch(err => console.error("Error registrando SW:", err));
+      });
+  }
+</script>
+
+</body>
+</html>

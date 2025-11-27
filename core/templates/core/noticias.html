@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block title %}Noticias | Umbra Nexus{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+<h1 class="text-4xl md:text-3xl  font-bold text-[#19183b] mb-8 text-center">Noticias y Actualizaciones</h1>
+
+{% if noticias %}
+  <!-- Botón de filtros -->
+  <div class="mb-8 flex justify-end">
+    <div class="relative">
+      <button onclick="toggleFiltros()" name="btn-filtro" class="bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b] text-white px-6 py-3 md:px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+        </svg>
+        <span class="text-sm hidden md:inline">Filtrar noticias</span>
+        <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      
+      <!-- Panel de filtros desplegable -->
+      <div id="filtros-panel" class="hidden absolute right-0 top-full mt-2 bg-white rounded-lg shadow-2xl border border-[#a1c2bd] p-4 w-[280px] md:min-w-[280px] z-10">
+        <div class="mb-4">
+          <p class=" text-lg md:text-sm font-semibold text-[#19183b] mb-2">Filtrar por fecha:</p>
+          <div class="flex flex-col gap-2">
+            <button onclick="filterNoticias('todos')" id="btn-todos" name="btn-todasLasNoticias" class="filter-btn text-lg md:text-sm text-left px-4 py-2 rounded-lg font-medium transition bg-[#19183b] text-white">
+              📰 Todas las noticias
+            </button>
+            <button onclick="filterNoticias('recientes')" id="btn-recientes" name="btn-30dias" class="filter-btn text-lg md:text-sm text-left px-4 py-2 rounded-lg font-medium transition bg-gray-100 text-gray-700 hover:bg-[#a1c2bd]">
+              🕐 Últimos 30 días
+            </button>
+            <button onclick="filterNoticias('antiguas')" id="btn-antiguas" name="btn-masAntiguas" class="filter-btn text-lg md:text-sm text-left px-4 py-2 rounded-lg font-medium transition bg-gray-100 text-gray-700 hover:bg-[#a1c2bd]">
+              📂 Más antiguas
+            </button>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-200 pt-4">
+          <p class="text-lg md:text-sm font-semibold text-[#19183b] mb-2">Ordenar:</p>
+          <select onchange="ordenarNoticias(this.value)" class="w-full px-4 py-2 rounded-lg border border-[#a1c2bd] bg-white text-lg md:text-sm text-gray-700 font-medium cursor-pointer">
+            <option value="desc">⬇️ Más recientes primero</option>
+            <option value="asc">⬆️ Más antiguas primero</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="noticias-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for noticia in noticias %}
+      <div class="noticia-card bg-[#f5efe6] rounded-xl overflow-hidden shadow-lg border border-[#a1c2bd] hover:scale-[1.03] transition cursor-pointer" 
+           data-fecha="{{ noticia.fecha|date:'Y-m-d' }}"
+           onclick="openModal{{ forloop.counter }}()">
+        {% if noticia.imagen %}
+          <img src="{{ noticia.imagen.url }}" class="w-full h-48 object-cover" alt="{{ noticia.titulo }}" loading="lazy">
+        {% endif %}
+        <div class="p-5">
+          <h3 class="text-3xl md:text-2xl font-bold text-[#19183b]">{{ noticia.titulo }}</h3>
+          <p class="text-lg md:text-sm text-gray-600">{{ noticia.fecha|date:"d/m/Y" }}</p>
+          <p class="text-sm md:text-sm text-gray-700 mt-2">{{ noticia.contenido|truncatechars:150|striptags|safe }}</p>
+          <button name="leerMas" class="mt-3 text-[#19183b] hover:text-[#a1c2bd] font-medium text-lg md:text-lg">
+            Leer más →
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal para cada noticia -->
+      <div id="modal{{ forloop.counter }}" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#f5efe6] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+          {% if noticia.imagen %}
+            <img src="{{ noticia.imagen.url }}" class="w-full h-64 object-cover" alt="{{ noticia.titulo }}" loading="lazy">
+          {% endif %}
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h2 class="text-3xl md:text-2xl font-semibold text-[#19183b]">{{ noticia.titulo }}</h2>
+                <p class="text-lg md:text-sm text-gray-600 mt-1">{{ noticia.fecha|date:"d/m/Y" }}</p>
+              </div>
+              <button name="equis" onclick="closeModal{{ forloop.counter }}()" class="text-2xl md:text-2xl text-[#19183b] hover:text-[#a1c2bd] font-bold">
+                x
+              </button>
+            </div>
+            <div class="text-lg md:text-lg text-gray-700 leading-relaxed prose max-w-none">
+              {{ noticia.contenido|safe }}
+            </div>
+            <br>
+            <button name="cerrar" onclick="closeModal{{ forloop.counter }}()" class="bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b] text-[#f5efe6] text-sm px-6 py-3 md:px-4 md:py-2 rounded-lg font-semibold transition">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function openModal{{ forloop.counter }}() {
+          document.getElementById('modal{{ forloop.counter }}').style.display = 'flex';
+        }
+        
+        function closeModal{{ forloop.counter }}() {
+          document.getElementById('modal{{ forloop.counter }}').style.display = 'none';
+        }
+
+        document.getElementById('modal{{ forloop.counter }}').addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal{{ forloop.counter }}();
+          }
+        });
+      </script>
+    {% endfor %}
+  </div>
+
+  <!-- Mensaje cuando no hay resultados -->
+  <div id="no-results" class="hidden text-center py-10">
+    <p class="text-gray-700 text-lg">No se encontraron noticias para este filtro.</p>
+  </div>
+
+
+  <!-- Paginación -->
+  {% if noticias.has_other_pages %}
+  <div class="flex justify-center items-center gap-2 mt-12">
+    {% if noticias.has_previous %}
+      <a href="?page=1" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+        ««
+      </a>
+      <a href="?page={{ noticias.previous_page_number }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+        <
+      </a>
+    {% else %}
+      <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">««</span>
+      <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">‹</span>
+    {% endif %}
+
+    <span class="px-4 py-2 text-[#19183b] font-semibold">
+      Página {{ noticias.number }} de {{ noticias.paginator.num_pages }}
+    </span>
+
+    {% if noticias.has_next %}
+      <a href="?page={{ noticias.next_page_number }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+        >
+      </a>
+      <a href="?page={{ noticias.paginator.num_pages }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+        »»
+      </a>
+    {% else %}
+      <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">›</span>
+      <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">»»</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+
+{% else %}
+  <p class="text-gray-700 text-center">No hay noticias disponibles.</p>
+{% endif %}
+</div>
+
+<script defer>
+  let currentOrder = 'desc';
+
+  function toggleFiltros() {
+    const panel = document.getElementById('filtros-panel');
+    const arrow = document.getElementById('arrow-icon');
+    
+    if (panel.classList.contains('hidden')) {
+      panel.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+    } else {
+      panel.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function openModal{{ forloop.counter }}() {
+          document.getElementById('modal{{ forloop.counter }}').style.display = 'flex';
+        }
+        
+        function closeModal{{ forloop.counter }}() {
+          document.getElementById('modal{{ forloop.counter }}').style.display = 'none';
+        }
+
+        document.getElementById('modal{{ forloop.counter }}').addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal{{ forloop.counter }}();
+          }
+        });
+
+  // Cerrar el panel al hacer clic fuera
+  document.addEventListener('click', function(event) {
+    const panel = document.getElementById('filtros-panel');
+    const button = event.target.closest('button');
+    
+    if (!panel.contains(event.target) && button?.onclick?.toString().indexOf('toggleFiltros') === -1) {
+      panel.classList.add('hidden');
+      document.getElementById('arrow-icon').style.transform = 'rotate(0deg)';
+    }
+  });
+
+  function filterNoticias(filtro) {
+    const cards = document.querySelectorAll('.noticia-card');
+    const today = new Date();
+    let visibleCount = 0;
+
+    // Actualizar botones activos
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.remove('bg-[#19183b]', 'text-white');
+      btn.classList.add('bg-gray-100', 'text-gray-700');
+    });
+    document.getElementById(`btn-${filtro}`).classList.remove('bg-gray-100', 'text-gray-700');
+    document.getElementById(`btn-${filtro}`).classList.add('bg-[#19183b]', 'text-white');
+
+    cards.forEach(card => {
+      const fechaStr = card.getAttribute('data-fecha');
+      const fechaNoticia = new Date(fechaStr);
+      let mostrar = false;
+
+      if (filtro === 'todos') {
+        mostrar = true;
+      } else if (filtro === 'recientes') {
+        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        mostrar = fechaNoticia >= thirtyDaysAgo;
+      } else if (filtro === 'mes') {
+        mostrar = fechaNoticia.getMonth() === today.getMonth() && 
+                  fechaNoticia.getFullYear() === today.getFullYear();
+      } else if (filtro === 'antiguas') {
+        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        mostrar = fechaNoticia < thirtyDaysAgo;
+      }
+
+      if (mostrar) {
+        card.style.display = 'block';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Mostrar mensaje si no hay resultados
+    document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+    document.getElementById('noticias-container').style.display = visibleCount === 0 ? 'none' : 'grid';
+
+    // Cerrar el panel de filtros
+    document.getElementById('filtros-panel').classList.add('hidden');
+    document.getElementById('arrow-icon').style.transform = 'rotate(0deg)';
+  }
+
+  function ordenarNoticias(orden) {
+    currentOrder = orden;
+    const container = document.getElementById('noticias-container');
+    const cards = Array.from(document.querySelectorAll('.noticia-card'));
+
+    cards.sort((a, b) => {
+      const dateA = new Date(a.getAttribute('data-fecha'));
+      const dateB = new Date(b.getAttribute('data-fecha'));
+      
+      if (orden === 'desc') {
+        return dateB - dateA;
+      } else {
+        return dateA - dateB;
+      }
+    });
+
+    // Reordenar en el DOM
+    cards.forEach(card => container.appendChild(card));
+  }
+</script>
+{% endblock %}

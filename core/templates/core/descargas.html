@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}Descargas | Umbra Nexus{% endblock %}
+{% load static %}
+{% block content %}
+<div class="min-h-screen">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    
+    {% if apps %}
+    <!-- Sección Aplicación Móvil -->
+    <section class="mb-16">
+      <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-8 text-center">Aplicación Móvil</h2>
+      
+      {% for a in apps %}
+      <div class="rounded-lg overflow-hidden mb-8">
+        <div class="grid md:grid-cols-[320px_1fr] gap-0">
+          <div class="flex items-center justify-center p-6">
+            {% if a.imagen %}
+            <img src="{{ a.imagen.url }}" alt="{{ a.nombre }}" class="w-full max-w-[200px] md:max-w-[280px] rounded-lg shadow-sm" loading="lazy">
+            {% else %}
+            <div class="w-[280px] h-[400px] bg-gray-200 rounded-lg flex items-center justify-center">
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="p-8 flex flex-col justify-between">
+            <div>
+              <h3 class="text-3xl md:text-2xl font-bold text-[#19183b] mb-2 text-center md:text-left">{{ a.nombre }}</h3>
+              
+              <div class="mb-6">
+                <p class="text-lg text-[#2c3e50] font-semibold mb-2">Descripción</p>
+                <div class="relative">
+                  <div id="desc-app-{{ forloop.counter }}" class="text-lg text-gray-600 leading-relaxed line-clamp-3">
+                    {{ a.descripcion|safe }}
+                  </div>
+                  <button onclick="toggleDescription('app', {{ forloop.counter }})" id="btn-app-{{ forloop.counter }}" name="btn-vermas" class="mt-2 text-[#a1c2bd] hover:text-[#19183b] font-semibold text-lg transition-colors">
+                    Ver más ↓
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a href="{{ a.enlace }}" target="_blank"
+             class="block w-full text-lg text-white text-center px-6 py-3 rounded-lg font-semibold transition-colors duration-200 bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b]">
+            Descargar Aplicación
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+
+    {% if juegos %}
+    <!-- Sección Videojuego -->
+    <section class="mb-12">
+      <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-8 text-center">Videojuego</h2>
+      
+      {% for j in juegos %}
+      <div class="rounded-lg overflow-hidden mb-8">
+        <!-- Parte superior: Imagen y Descripción -->
+        <div class="grid md:grid-cols-[320px_1fr] gap-0">
+          <div class="flex items-center justify-center p-6">
+            {% if j.imagen %}
+            <img src="{{ j.imagen.url }}" alt="{{ j.nombre }}" class="w-full max-w-[200px] md:max-w-[280px] rounded-lg shadow-sm" loading="lazy">
+            {% else %}
+            <div class="w-[280px] h-[400px] bg-gray-200 rounded-lg flex items-center justify-center">
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="p-8 flex flex-col justify-between">
+            <div>
+              <h3 class="text-3xl md:text-2xl font-bold text-[#19183b] mb-2 text-center md:text-left">{{ j.nombre }}</h3>
+              {% if j.idioma %}
+              <div class="flex items-center gap-2 mb-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Mexico.svg" alt="Bandera de México" class="w-8 h-auto rounded shadow" loading="lazy">
+                <p class="text-sm text-gray-500">{{ j.idioma }}</p>
+              </div>
+              {% endif %}
+              
+              <div class="mb-6">
+                <p class="text-lg text-[#2c3e50] font-semibold mb-2">Descripción</p>
+                <div class="relative">
+                  <div id="desc-juego-{{ forloop.counter }}" class="text-lg text-gray-600 leading-relaxed line-clamp-3">
+                    {{ j.descripcion|safe }}
+                  </div>
+                  <button onclick="toggleDescription('juego', {{ forloop.counter }})" id="btn-juego-{{ forloop.counter }}" name="btn-vermas" class="mt-2 text-[#a1c2bd] hover:text-[#19183b] font-semibold text-lg transition-colors">
+                    Ver más ↓
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requisitos del Sistema - Debajo de todo -->
+        {% if j.requisitosmin or j.requisitosmax %}
+        <div class="px-6 pb-6">
+          <p class="text-2xl text-center md:text-left text-[#2c3e50] font-semibold mb-2">Requisitos del sistema</p>
+          <div class="text-[#2c3e50] rounded-lg p-5 grid md:grid-cols-2 gap-6">
+            {% if j.requisitosmin %}
+            <div class="text-lg md:text-sm">
+              {{ j.requisitosmin|safe }}
+            </div>
+            {% endif %}
+            
+            {% if j.requisitosmax %}
+            <div class="text-lg md:text-sm">
+              {{ j.requisitosmax|safe }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Botón de descarga -->
+        <div class="px-6 pb-6">
+          <a href="{{ j.enlace }}" target="_blank"
+             class="block w-full text-lg text-white text-center px-6 py-3 rounded-lg font-semibold transition-colors duration-200 bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b]">
+            Descargar Videojuego
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+  </div>
+</div>
+
+<script defer>
+  function toggleDescription(type, index) {
+    const descElement = document.getElementById(`desc-${type}-${index}`);
+    const btnElement = document.getElementById(`btn-${type}-${index}`);
+    
+    if (descElement.classList.contains('line-clamp-3')) {
+      descElement.classList.remove('line-clamp-3');
+      descElement.classList.add('line-clamp-none');
+      btnElement.innerHTML = 'Ver menos ↑';
+    } else {
+      descElement.classList.add('line-clamp-3');
+      descElement.classList.remove('line-clamp-none');
+      btnElement.innerHTML = 'Ver más ↓';
+      
+      // Scroll suave hacia el elemento
+      descElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+</script>
+{% endblock %}

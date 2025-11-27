@@ -1,0 +1,24 @@
+{
+  "name": "Umbra Nexus",
+  "short_name": "Umbra Nexus",
+  "description": "Sitio oficial de Umbra Nexus - Noticias, Galería y Descargas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9f5f0",
+  "theme_color": "#19183b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/img/umbra nexus-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/img/umbra nexus-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

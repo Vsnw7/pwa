@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% block title %}Inicio | Umbra Nexus{% endblock %}
+{% load static %}
+{% block content %}
+
+<section class="relative h-[90vh] flex items-center justify-center text-center text-[#f5efe6] px-4">
+  <img src="{% static 'img/fondo4.webp' %}" alt="Umbra Nexus" class="absolute inset-0 w-full h-full object-cover opacity-90" fetchpriority="high" decoding="async" loading="eager">
+  <div class="relative z-10 bg-[#19183b]/70 p-10 md:p-8 rounded-2xl shadow-2xl max-w-2xl mx-auto animate-fade-in w-full">
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-4">Umbra Nexus</h1>
+    <p class="text-sm md:text-lg mb-4 md:mb-5">Estudio de desarrollo de videojuegos y aplicaciones móviles. Fusionamos arte, narrativa y tecnología para crear experiencias únicas.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+      <a href="{% url 'descargas' %}" 
+         class="animate-pulse bg-[#a1c2bd] text-[#19183b] px-6 py-4 md:px-4 md:py-2 rounded-lg text-lg md:text-xl font-bold hover:bg-[#f5efe6] transition">
+         Ver nuestros proyectos
+      </a>
+      <a href="#nosotros"
+         class="border-2 border-[#a1c2bd] text-[#a1c2bd] px-6 py-4 md:px-4 md:py-2 rounded-lg text-lg md:text-xl font-bold hover:bg-[#a1c2bd] hover:text-[#19183b] transition">
+         Saber más
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NOSOTROS ======================= -->
+<section id="nosotros" class="py-20 bg-[#f5efe6] text-center">
+  <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-12">Nosotros</h2>
+
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+
+    <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1">
+      <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#a1c2bd] to-[#19183b] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fas fa-bullseye text-2xl md:text-3xl text-white"></i>
+      </div>
+      <h3 class="text-3xl md:text-xl font-semibold text-[#19183b] mb-3">Misión</h3>
+      <p class="text-lg md:text-lg text-gray-700">Inspirar e impulsar la innovación en el entretenimiento digital, creando proyectos que dejen una huella duradera en nuestros usuarios.</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1">
+      <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#19183b] to-[#a1c2bd] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fas fa-eye text-2xl md:text-3xl text-white"></i>
+      </div>
+      <h3 class="text-3xl md:text-xl font-semibold text-[#19183b] mb-3">Visión</h3>
+      <p class="text-lg md:text-lg text-gray-700">Convertirnos en líderes de innovación interactiva, reconocidos por nuestra calidad e innovación constante.</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1">
+      <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#a1c2bd] via-[#19183b] to-[#a1c2bd] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fas fa-users text-2xl md:text-3xl text-white"></i>
+      </div>
+      <h3 class="text-3xl md:text-xl font-semibold text-[#19183b] mb-3">Equipo</h3>
+      <p class="text-lg md:text-lg text-gray-700">Colaboradores dedicados y grupo multidisciplinario comprometidos en crear experiencias digitales, narrativa y desarrollo tecnológico.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= IMAGEN INTERMEDIA ======================= -->
+<section class="relative h-[60vh]">
+  <img src="{% static 'img/fondo3.webp' %}" alt="Equipo Umbra Nexus" class="absolute inset-0 w-full h-full object-cover opacity-90" loading="lazy">
+  <div class="absolute inset-0 bg-[#19183b]/50 flex items-center justify-center">
+    <!--<h2 class="text-4xl text-[#f5efe6] font-extrabold animate-pulse">Innovación sin límites</h2>-->
+  </div>
+</section>
+
+<!-- ======================= NOTICIAS ======================= -->
+<section id="noticias" class="py-20 bg-[#f5efe6] text-center">
+  <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-12">Noticias</h2>
+  
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+    {% for noticia in noticias %}
+    <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 hover:shadow-xl transition flex flex-col h-full">
+      {% if noticia.imagen %}
+      <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}" class="rounded-lg mb-3 w-full h-48 object-cover" loading="lazy">
+      {% endif %}
+      <h3 class="text-2xl md:text-xl font-semibold text-[#19183b] mb-2 line-clamp-2 min-h-[3.5rem]">{{ noticia.titulo }}</h3>
+      <p class="text-xl md:text-sm text-gray-700 mb-3 line-clamp-4">{{ noticia.contenido|truncatechars:150|safe }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <div class="mt-10">
+    <a href="{% url 'noticias' %}" 
+    class="bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b] text-[#f5efe6] text-lg md:text-xl px-6 py-4 md:px-4 md:py-2 rounded-lg font-semibold transition">
+    Ver todas las noticias
+  </a>
+</div>
+</section>
+
+<!-- ======================= IMAGEN INTERMEDIA ======================= -->
+<section class="relative h-[60vh]">
+  <img src="{% static 'img/fondo2.webp' %}" alt="Equipo Umbra Nexus" class="absolute inset-0 w-full h-full object-cover opacity-90" loading="lazy">
+  <div class="absolute inset-0 bg-[#19183b]/50 flex items-center justify-center">
+    <h2 class="text-4xl text-[#f5efe6] font-extrabold animate-pulse"></h2>
+  </div>
+</section>
+
+<!-- ======================= CONTACTO ======================= -->
+<section id="contacto" class="py-20 bg-[#19183b] text-[#f5efe6]">
+  <div class="container mx-auto px-6 py-10 max-w-4xl mx-auto text-center">
+    <h2 class="text-4xl md:text-3xl font-bold mb-8">Contáctanos</h2>
+    <p class="text-lg md:text-sm text-[#a1c2bd] mb-10">¿Tienes un proyecto en mente o quieres colaborar con nosotros? ¡Hablemos!</p>
+    <div class="bg-[#f5efe6] text-[#19183b] text-left font-semibold p-8 rounded-2xl shadow-lg">
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="animate-bounce w-full bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b] text-[#f5efe6] text-lg md:text-xl px-6 py-4 md:px-4 md:py-2 rounded-lg font-semibold transition">
+          Enviar mensaje
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MAPA ======================= -->
+<section id="mapa" class="bg-[#f5efe6] text-center">
+  <div class="container mx-auto px-6 py-10">
+    <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-6">Nuestra Ubicación</h2>
+    <div class="max-w-5xl mx-auto border-4 border-[#a1c2bd] rounded-lg overflow-hidden shadow-lg">
+      <iframe 
+        title="mapa-ubicación" 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30048.488495723257!2d-101.17296788762208!3d19.710024301378333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e2765411ef1%3A0x3ca21a3f9f26b9b1!2sUniversidad%20Tecnol%C3%B3gica%20de%20Morelia!5e0!3m2!1ses-419!2smx!4v1762304281772!5m2!1ses-419!2smx" 
+        width="100%" 
+        height="450" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      
+    </div>
+  </div>
+</section>
+
+<button aria-label="Volver arriba" id="scrollToTop" class="fixed bottom-6 md:bottom-8 right-6 md:right-8 bg-[#a1c2bd] hover:bg-[#f5efe6] text-[#19183b] hover:text-[#19183b] w-8 h-8 md:w-14 md:h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 opacity-0 invisible z-50">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+  </svg>
+</button>
+
+<script>
+  // Botón Scroll to Top
+  const scrollToTopBtn = document.getElementById('scrollToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+      scrollToTopBtn.classList.add('opacity-100', 'visible');
+    } else {
+      scrollToTopBtn.classList.remove('opacity-100', 'visible');
+      scrollToTopBtn.classList.add('opacity-0', 'invisible');
+    }
+  });
+  
+  scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+{% endblock %}

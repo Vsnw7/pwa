@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Galería | Umbra Nexus{% endblock %}
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <h1 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-8 text-center">Galería de Medios</h1>
+  
+  {% if imagenes %}
+  <div class="grid grid-cols-1 md:grid-cols-3  columns-2 gap-4 sm:columns-3 sm:gap-8">
+    {% for img in imagenes %}
+      <div class="bg-[#f5efe6] rounded-xl overflow-hidden shadow-lg border border-[#a1c2bd] hover:scale-[1.03] transition">
+        <img src="{{ img.imagen.url }}" alt="{{ img.titulo }}" class="w-full h-64 object-cover" loading="lazy">
+        <div class="p-4">
+          <h3 class="text-lg text-[#19183b] font-semibold">{{ img.titulo }}</h3>
+          {% if img.descripcion %}
+            <p class="text-gray-700 text-sm mt-2">{{ img.descripcion }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+<!-- Paginación -->
+    {% if imagenes.has_other_pages %}
+    <div class="flex justify-center items-center gap-2 mt-12">
+      {% if imagenes.has_previous %}
+        <a href="?page=1" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+          ««
+        </a>
+        <a href="?page={{ imagenes.previous_page_number }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+          <
+        </a>
+      {% else %}
+        <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">««</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">‹</span>
+      {% endif %}
+
+      <span class="px-4 py-2 text-[#19183b] font-semibold">
+        Página {{ imagenes.number }} de {{ imagenes.paginator.num_pages }}
+      </span>
+
+      {% if imagenes.has_next %}
+        <a href="?page={{ imagenes.next_page_number }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+          >
+        </a>
+        <a href="?page={{ imagenes.paginator.num_pages }}" class="px-4 py-2 rounded-lg bg-[#19183b] text-white hover:bg-[#a1c2bd] hover:text-[#19183b] transition font-semibold">
+          »»
+        </a>
+      {% else %}
+        <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">›</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed font-semibold">»»</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+  {% else %}
+  <p class="text-gray-700 text-center">No hay imágenes disponibles todavía.</p>
+  {% endif %}
+</div>
+{% endblock %}
