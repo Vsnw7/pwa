@@ -150,7 +150,7 @@
   if ("serviceWorker" in navigator) {
       window.addEventListener('load', function() {
           // Nota: Ya no usamos /static/, apuntamos a la raíz
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('{% static "sw.js" %}')
            .then(reg => console.log("SW registrado con éxito en el scope:", reg.scope))
            .catch(err => console.error("Error registrando SW:", err));
       });

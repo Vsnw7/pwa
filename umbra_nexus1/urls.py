@@ -9,11 +9,6 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('sw.js', TemplateView.as_view(
-        template_name='sw.js', 
-        content_type='application/javascript'
-    ), name='sw.js'),
 ]
 
 
