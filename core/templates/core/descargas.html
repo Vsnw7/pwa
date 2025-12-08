@@ -6,7 +6,7 @@
   <div class="max-w-4xl mx-auto px-6 py-12">
     
     {% if apps %}
-    <!-- Sección Aplicación Móvil -->
+    <!-- Aplicación Móvil -->
     <section class="mb-16">
       <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-8 text-center">Aplicación Móvil</h2>
       
@@ -40,6 +40,8 @@
             </div>
           </div>
         </div>
+
+        <!-- Dscarga de aplicación -->
         <div class="mt-6">
           <a href="{{ a.enlace }}" target="_blank"
              class="block w-full text-lg text-white text-center px-6 py-3 rounded-lg font-semibold transition-colors duration-200 bg-[#19183b] hover:bg-[#a1c2bd] hover:text-[#19183b]">
@@ -53,7 +55,7 @@
 
 
     {% if juegos %}
-    <!-- Sección Videojuego -->
+    <!-- Videojuego -->
     <section class="mb-12">
       <h2 class="text-4xl md:text-3xl font-bold text-[#19183b] mb-8 text-center">Videojuego</h2>
       
@@ -95,7 +97,7 @@
           </div>
         </div>
 
-        <!-- Requisitos del Sistema - Debajo de todo -->
+        <!-- Requisitos del Sistema -->
         {% if j.requisitosmin or j.requisitosmax %}
         <div class="px-6 pb-6">
           <p class="text-2xl text-center md:text-left text-[#2c3e50] font-semibold mb-2">Requisitos del sistema</p>
@@ -144,7 +146,6 @@
       descElement.classList.remove('line-clamp-none');
       btnElement.innerHTML = 'Ver más ↓';
       
-      // Scroll suave hacia el elemento
       descElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }

@@ -13,7 +13,7 @@
   <!-- PWA Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
 
-  <!-- iOS Meta Tags -->
+  <!-- Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Umbra Nexus">
@@ -104,7 +104,6 @@
   </footer>
 
 
-  <!-- SCRIPT PEQUEÑO -->
   <script defer>
   const menuBtn = document.getElementById('menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
@@ -149,7 +148,6 @@
 
   if ("serviceWorker" in navigator) {
       window.addEventListener('load', function() {
-          // Nota: Ya no usamos /static/, apuntamos a la raíz
           navigator.serviceWorker.register('/sw.js')
            .then(reg => console.log("SW OK", reg.scope))
            .catch(err => console.error("Error SW:", err));

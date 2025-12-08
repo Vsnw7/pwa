@@ -5,7 +5,7 @@ from .models import Noticia, ImagenGaleria, Descarga, MensajeContacto
 from .forms import FormularioContacto
 
 def inicio(request):
-    # Manejamos el formulario de contacto
+    # Formulario de contacto
     if request.method == 'POST':
         form = FormularioContacto(request.POST)
         if form.is_valid():
@@ -15,13 +15,12 @@ def inicio(request):
     else:
         form = FormularioContacto()
 
-    # Obtenemos las 3 últimas noticias
+    # 3 últimas noticias
     noticias = Noticia.objects.all()[:3]
 
-    # Obtenemos los proyectos (descargas tipo 'game')
+    # Proyectos
     proyectos = Descarga.objects.filter(tipo='game')[:3]
 
-    # Contexto para el template
     context = {
         'form': form,
         'noticias': noticias,

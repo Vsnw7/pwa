@@ -5,7 +5,7 @@ const STATIC_CACHE = "static-v1";
 const DYNAMIC_CACHE = "dynamic-v1";
 
 const STATIC_FILES = [
-    "/",               // Inicio
+    "/",
     "/static/manifest.json",
 
     // Imágenes base
@@ -49,17 +49,17 @@ self.addEventListener("activate", (event) => {
     self.clients.claim();
 });
 
-// FETCH – estrategia incremental
+// FETCH – incremental
 self.addEventListener("fetch", (event) => {
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
                 if (cachedResponse) {
-                    // Existe en cache → úsalo
+                    // Si existe en cache lo uso
                     return cachedResponse;
                 }
 
-                // No está en cache → tratar de obtenerlo
+                // Si no está en caché trato de obtener
                 return fetch(event.request)
                     .then(networkResponse => {
                         // Solo insertar en cache dinámico si es una ruta válida
@@ -76,8 +76,7 @@ self.addEventListener("fetch", (event) => {
                         return networkResponse;
                     })
                     .catch(() => {
-                        // Si falla el fetch y tampoco está en cache, retornar nada
-                        // (puedes poner aquí un fallback si quieres)
+                        // Si falla el fetch y tampoco está en cache, retornar inicio
                         return caches.match("/");
                     });
             })
